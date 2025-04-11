@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка CutePlants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="loader" id="mainLoader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <div class="loader-text">Загрузка...</div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-leaf"></i>
+            CutePlants Admin
+        </div>
+        <button class="google-btn" id="googleLoginBtn" style="display: block;">
+            <i class="fab fa-google"></i> Войти через Google
+        </button>
+        <a href="#" class="logout-btn" id="logout" style="display: none;">
+            <i class="fas fa-sign-out-alt"></i> Выйти
+        </a>
+    </header>
+
+    <div class="admin-container">
+        <h1 id="adminTitle" class="hidden">Вход в админку</h1>
+
+        <!-- Форма логина -->
+        <div class="login-form" id="loginForm">
+            <i class="fas fa-user-shield" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;"></i>
+            <p>Войдите через Google, чтобы получить доступ к админке</p>
+            <div id="googleLoginContainer"></div>
+        </div>
+
+        <!-- Форма добавления -->
+        <div class="add-form hidden" id="addForm">
+            <h2 class="section-title"><i class="fas fa-plus-circle"></i> Добавить новый цветок</h2>
+            <form id="addFlowerForm">
+                <div class="form-group">
+                    <label for="name">Название</label>
+                    <input type="text" id="name" name="name" placeholder="Введите название цветка" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Категория</label>
+                    <input type="text" id="category" name="category" placeholder="Например: Комнатные растения" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="price">Цена (₽)</label>
+                        <input type="number" id="price" name="price" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Количество</label>
+                        <input type="number" id="quantity" name="quantity" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="size">Размер</label>
+                        <select id="size" name="size" required>
+                            <option value="" disabled selected>Выберите размер</option>
+                            <option value="Маленький">Маленький</option>
+                            <option value="Средний">Средний</option>
+                            <option value="Большой">Большой</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tips">Советы по уходу</label>
+                    <textarea id="tips" name="tips" placeholder="Опишите как ухаживать за цветком..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <textarea id="description" name="description" placeholder="Подробное описание цветка..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Фотографии</label>
+                    <div class="file-input-container">
+                        <label for="images" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Выбрать фотографии
+                            <span class="file-count" id="fileCount">0</span>
+                        </label>
+                        <input type="file" id="images" name="images" class="file-input" multiple accept="image/*">
+                    </div>
+                    <div class="image-preview" id="addImagePreview"></div>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-plus-circle"></i> Добавить цветок
+                </button>
+            </form>
+        </div>
+
+        <!-- Список цветков -->
+        <div id="flowerListContainer" class="hidden">
+            <h2 class="section-title"><i class="fas fa-leaf"></i> Список цветов</h2>
+            <div class="flower-list" id="flowerList"></div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeEditModal">×</span>
+            <h2 class="section-title"><i class="fas fa-edit"></i> Редактировать цветок</h2>
+            <form id="editFlowerForm">
+                <input type="hidden" id="editId" name="id">
+                <div class="form-group">
+                    <label for="editName">Название</label>
+                    <input type="text" id="editName" name="name" placeholder="Введите название цветка" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Категория</label>
+                    <input type="text" id="editCategory" name="category" placeholder="Например: Комнатные растения" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="editPrice">Цена (₽)</label>
+                        <input type="number" id="editPrice" name="price" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuantity">Количество</label>
+                        <input type="number" id="editQuantity" name="quantity" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSize">Размер</label>
+                        <select id="editSize" name="size" required>
+                            <option value="Маленький">Маленький</option>
+                            <option value="Средний">Средний</option>
+                            <option value="Большой">Большой</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editTips">Советы по уходу</label>
+                    <textarea id="editTips" name="tips" placeholder="Опишите как ухаживать за цветком..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Описание</label>
+                    <textarea id="editDescription" name="description" placeholder="Подробное описание цветка..."></textarea>
+                </div>
+                <div class="form-divider">
+                    <span>Изображения</span>
+                </div>
+                <div class="form-group">
+                    <label>Текущие фотографии</label>
+                    <div class="image-preview" id="editImagePreview"></div>
+                </div>
+                <div class="form-group">
+                    <label>Добавить новые фотографии</label>
+                    <div class="file-input-container">
+                        <label for="editImages" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Выбрать фотографии
+                            <span class="file-count" id="editFileCount">0</span>
+                        </label>
+                        <input type="file" id="editImages" name="images" class="file-input" multiple accept="image/*">
+                    </div>
+                    <div class="image-preview" id="editNewImagePreview"></div>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i> Сохранить изменения
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Тост уведомления -->
+    <div class="toast" id="toast">
+        <div class="toast-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="toast-message" id="toastMessage"></div>
+        <button class="toast-close" id="toastClose">×</button>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" defer></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/admin.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - CutePlants</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <div>
+                <i class="fas fa-leaf"></i>
+                CutePlants
+            </div>
+        </a>
+        <button class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/catalog.html">Каталог</a></li>
+                <li><a href="/profile.html" class="active">Профиль</a></li>
+            </ul>
+        </nav>
+        <a href="#" class="logout-btn" id="logout" style="display: none;">
+            <i class="fas fa-sign-out-alt"></i>
+            Выйти
+        </a>
+    </header>
+
+    <main class="main-content">
+        <div class="auth-section" id="authSection">
+            <div class="auth-card">
+                <h2 class="auth-title animate-fade-in-up">Добро пожаловать!</h2>
+                <p class="auth-subtitle animate-fade-in-up delay-1">Войдите, чтобы продолжить</p>
+                <div class="google-auth animate-fade-in-up delay-2">
+                    <div id="googleSignIn" class="google-btn">
+                        <i class="fab fa-google"></i>
+                        Продолжить с Google
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-content" id="profileContent">
+            <div class="profile-header">
+                <div class="user-info animate-fade-in-up">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-details">
+                        <h1 class="user-name" id="userName"></h1>
+                        <p class="user-email" id="userEmail"></p>
+                    </div>
+                </div>
+                <div class="profile-stats animate-fade-in-up delay-1">
+                    <div class="stat-card">
+                        <i class="fas fa-heart stat-icon"></i>
+                        <div class="stat-content">
+                            <span class="stat-value" id="favoritesCount">0</span>
+                            <span class="stat-label">Избранное</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shopping-cart stat-icon"></i>
+                        <div class="stat-content">
+                            <span class="stat-value" id="cartItemsCount">0</span>
+                            <span class="stat-label">Корзина</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs-container animate-fade-in-up delay-2">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="profile">
+                        <i class="fas fa-user"></i> Профиль
+                    </button>
+                    <button class="tab-btn" data-tab="favorites">
+                        <i class="fas fa-heart"></i> Избранное
+                    </button>
+                    <button class="tab-btn" data-tab="cart">
+                        <i class="fas fa-shopping-cart"></i> Корзина
+                    </button>
+                    <button class="tab-btn" data-tab="purchases">
+                        <i class="fas fa-history"></i> Покупки
+                    </button>
+                </div>
+
+                <div class="tab-content active" id="profile">
+                    <form class="profile-form" id="profileForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Адрес доставки</label>
+                                <input type="text" class="form-input" id="address" placeholder="Введите ваш адрес">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Телефон</label>
+                                <input type="tel" class="form-input" id="phone" placeholder="+7 (999) 999-99-99">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telegram</label>
+                                <input type="text" class="form-input" id="telegram" placeholder="@username">
+                            </div>
+                        </div>
+                        <button type="submit" class="save-btn">
+                            <i class="fas fa-save"></i> Сохранить изменения
+                        </button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="favorites">
+                    <div class="items-grid" id="favoritesGrid"></div>
+                </div>
+
+                <div class="tab-content" id="cart">
+                    <div class="cart-container">
+                        <div class="cart-header">
+                            <h2>Ваша корзина</h2>
+                        </div>
+                        <div class="cart-items" id="cartGrid"></div>
+                        <div class="cart-footer">
+                            <div class="cart-total" id="cartTotal"></div>
+                            <button class="cart-checkout-btn">Оформить заказ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="purchases">
+                    <div class="purchases-list" id="purchasesList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно -->
+        <div class="modal" id="plantModal">
+            <div class="modal-content">
+                <span class="close-modal">×</span>
+                <div class="modal-images">
+                    <div class="image-slider" id="modalImageSlider"></div>
+                    <button class="modal-slider-btn prev" id="modalPrevSlide"><i class="fas fa-chevron-left"></i></button>
+                    <button class="modal-slider-btn next" id="modalNextSlide"><i class="fas fa-chevron-right"></i></button>
+                    <div class="modal-slider-dots" id="modalSliderDots"></div>
+                </div>
+                <div class="modal-info">
+                    <h3 id="modalName"></h3>
+                    <p class="modal-price" id="modalPrice"></p>
+                    <p class="modal-category" id="modalCategory"></p>
+                    <p class="modal-size" id="modalSize"></p>
+                    <p class="modal-quantity" id="modalQuantity"></p>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <p class="modal-tips" id="modalTips"></p>
+                    <button class="add-to-cart modal-btn" id="modalAddToCart">
+                        <i class="fas fa-cart-plus"></i> В корзину
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/profile.js"></script>
+</body>
+</html>

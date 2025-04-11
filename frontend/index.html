@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CutePlants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <div>
+                <i class="fas fa-leaf"></i>
+                CutePlants
+            </div>
+        </a>
+        <button class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="/" class="active">Главная</a></li>
+                <li><a href="/catalog.html">Каталог</a></li>
+                <li><a href="/profile.html">Профиль</a></li>
+            </ul>
+        </nav>
+        <a href="#" class="logout-btn" id="logout" style="display: none;">Выйти</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="animate-fade-in-up">Милые растения<br>для вашего дома</h1>
+            <p class="animate-fade-in-up delay-1">Наши растения привносят уют и свежесть в любое пространство</p>
+            <button class="action-btn animate-fade-in-up delay-2" id="shopNowBtn">
+                <i class="fas fa-shopping-bag"></i>
+                Купить сейчас
+            </button>
+        </div>
+        <div class="hero-image animate-fade-in-up delay-2">
+            <dotlottie-player
+                src="https://lottie.host/4e5838d4-5af5-4d31-a708-981f312a24a0/HkCHkZa3x4.lottie"
+                background="transparent"
+                speed="1"
+                style="width: 100%; height: auto"
+                loop
+                autoplay
+            ></dotlottie-player>
+        </div>
+    </section>
+
+    <section class="popular" id="popular">
+        <h2 class="animate-fade-in-up">Популярные товары</h2>
+        <div class="slider-container">
+            <div class="emoji-grid" id="popularList"></div>
+            <button class="slider-btn prev" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-dots" id="sliderDots"></div>
+    </section>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="plantModal">
+        <div class="modal-content">
+            <span class="close-modal">×</span>
+            <div class="modal-images">
+                <div class="image-slider" id="modalImageSlider"></div>
+                <button class="modal-slider-btn prev" id="modalPrevSlide"><i class="fas fa-chevron-left"></i></button>
+                <button class="modal-slider-btn next" id="modalNextSlide"><i class="fas fa-chevron-right"></i></button>
+                <div class="modal-slider-dots" id="modalSliderDots"></div>
+            </div>
+            <div class="modal-info">
+                <h3 id="modalName"></h3>
+                <p class="modal-price" id="modalPrice"></p>
+                <p class="modal-category" id="modalCategory"></p>
+                <p class="modal-size" id="modalSize"></p>
+                <p class="modal-description" id="modalDescription"></p>
+                <button class="add-to-cart modal-btn">
+                    <i class="fas fa-cart-plus"></i> В корзину
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>

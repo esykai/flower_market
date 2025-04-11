@@ -1,0 +1,73 @@
+version: '3.8'
+
+x-common-env: &common-env
+  PYTHONUNBUFFERED: "1"
+  GOOGLE_CLIENT_ID: "523452047195-uugq2rpq2u9lpb7d0fiffjn26o36c6mj.apps.googleusercontent.com"
+  DATABASE_URL: "postgresql+asyncpg://postgres:password@db:5432/dating_app"
+
+services:
+  backend-main:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      <<: *common-env
+      SECRET_KEY: "your-secret-key-here"
+      ADMIN_EMAILS: "santyasaneko@gmail.com, esykaidev@gmail.com"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - db
+
+  backend-bot:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    environment:
+      <<: *common-env
+      TELEGRAM_TOKEN: "7147526678:AAHD_94HR5_6v5FT37xldnxYGzx4jzkUw-k"
+      BASE_IMAGE_URL: "http://backend-main:8000/static/"
+      BASE_FLOWER_URL: "http://frontend:80/catalog.html?flower_id="
+      DEBUG_MODE: "True"
+      OWNER_IDS: "5078575051,5078575052"
+    command: python bot.py
+    depends_on:
+      - backend-main
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    environment:
+      <<: *common-env
+      API_URL: "http://localhost:8000"
+      STATIC_URL: "http://localhost:8000/static"
+      TELEGRAM_BOT_URL: "https://t.me/robloxfood_bot"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "dating_app"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    driver: bridge
